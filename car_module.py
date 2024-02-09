@@ -1,6 +1,7 @@
 import json;
 import numpy;
 import requests;
+import threading;
 import base64;
 import time;
 
@@ -8,7 +9,7 @@ from multiprocessing import Process, Manager;
 
 class CarControl:
 
-    def __init__(self, ip, image_rate=0.05, image_downscale=10, control_rate=0.05):
+    def __init__(self, ip, image_rate=0.05, image_downscale=10, control_rate=0.1):
 
         self.ip = ip;
         self.car_image = None;
@@ -65,6 +66,25 @@ class CarControl:
                              'value': value
                          });
 
+
+    def async_control(self, type, value):
+        self.session.post(self.ip + "/control/",
+                         json={
+                             'type': type,
+                             'value': value
+        });
+
+    def async_image(self):
+        image = self.session.get(self.ip + "/image/", json={"down_scale": self.image_downscale});
+
+        enc = json.loads(image.text)
+
+        dataType = numpy.dtype(enc[0])
+        dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
+
+        self.ns.carImage = dataArray;
+
+
     def image_loop(self):
         self.ns.image_process_started = True;
 
@@ -72,14 +92,7 @@ class CarControl:
 
             if(self.image_rate == -1): continue;
 
-            image = self.session.get(self.ip + "/image/", json={"down_scale": self.image_downscale});
-
-            enc = json.loads(image.text)
-
-            dataType = numpy.dtype(enc[0])
-            dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
-
-            self.ns.carImage = dataArray;
+            threading.Thread(target=self.async_image).start()
 
             time.sleep(self.image_rate);
 
@@ -90,17 +103,8 @@ class CarControl:
         while True:
             if(self.control_rate == -1): continue;
 
-            self.session.post(self.ip + "/control/",
-                             json={
-                                 'type': "turn",
-                                 'value': self.ns.turnValue
-            });
-
-            self.session.post(self.ip + "/control/",
-                             json={
-                                 'type': "speed",
-                                 'value': self.ns.speedValue
-            });
+            threading.Thread(target=self.async_control, args=("turn", self.ns.turnValue)).start();
+            threading.Thread(target=self.async_control, args=("speed", self.ns.speedValue)).start();
 
             time.sleep(self.control_rate);
 
