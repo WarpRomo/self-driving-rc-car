@@ -2,38 +2,59 @@
 
 ### CarController(ip, image_rate, image_downsample, control_rate)
 > #### ip(required)
-> The IP of the car's server to connect to, example: ip="http://127.0.0.1:5000"
+> The IP of the car's server to connect to.
 
 > #### image_rate
-> The interval at which to fetch the image from the camera of the car, set to -1 to fetch nothing at all, example: image_rate=0.1
+> The interval at which to fetch the image from the camera of the car, set to -1 to fetch nothing at all.
 
 > #### image_downsample
-> The amount to scale down the image the car sends from the image fetch, higher is faster, example: image_downsample=10
+> The amount to scale down the image the car sends from the image fetch, higher is faster.
 
 > #### control_rate
-> The interval at which to send car inputs to the car's server, example: control_rate=0.1</p>
+> The interval at which to send car inputs to the car's server.
 
 > [!NOTE]
-> For image_rate and control_rate, do not use too low of a value or the server will become flooded. Recommended is 0.1 for both.
+> For image_rate and control_rate, do not use too low of a value or the server will become flooded.
 
 ```python
-CarManager = CarControl(ip=http://127.0.0.1:5000)
+CarManager = CarControl(ip="http://127.0.0.1:5000")
 ```
 ```python
-CarManager = CarControl(ip=http://127.0.0.1:5000, image_rate=0.1, control_rate=0.1)
+CarManager = CarControl(ip="http://127.0.0.1:5000", 
+                        image_rate=0.1, 
+                        control_rate=0.1)
 ```
 ```python
-CarManager = CarControl(ip=http://127.0.0.1:5000, image_rate=0.1, control_rate=0.1, image_downsample=10)
+CarManager = CarControl(ip="http://127.0.0.1:5000", 
+                        image_rate=0.1, 
+                        control_rate=0.1, 
+                        image_downsample=10)
 ```
 
 ### CarController.turn(value)
 
 > #### value(required)
-> The direciton that the wheels should be set to. -1 is left, 1 is right, keep the value between -1 and 1, example: value=0.7
+> The direciton that the wheels should be set to. -1 is left, 1 is right, keep the value between -1 and 1.
+
+```python
+CarManager = CarControl(ip="127.0.0.1:5000")
+CarManager.turn(-1) #turn left
+```
 
 ### CarController.speed(value)
 > #### value(required)
-> The speed that the wheels should turn -1 is backwrads, 1 is forwards, keep the value between -1 and 1 and low, example: value=-0.3
+> The speed that the wheels should turn -1 is backwrads, 1 is forwards, keep the value between -1 and 1 and low.
+
+```python
+CarManager = CarControl(ip="127.0.0.1:5000")
+CarManager.turn(-0.3) #move backwards 
+```
 
 ### CarController.ns.carImage
-> An RGB array containing the most recently fetched image from the car.
+> A numpy RGB array containing the most recently fetched image from the car.
+
+```python
+CarManager = CarControl(ip="127.0.0.1:5000")
+time.sleep(0.5)
+print(CarManager.ns.carImage)
+```
