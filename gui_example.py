@@ -4,7 +4,7 @@ import pygame;
 
 from car_module import CarControl;
 
-car_max_speed = 0.35;
+car_max_speed = 0.45;
 
 mouseX = 0;
 mouseY = 0;
@@ -22,7 +22,7 @@ key_pad_padding = 10;
 
 def main():
 
-    CarManager = CarControl('http://20.1.1.70:5000', control_rate=0.1, image_rate=0.1, image_downscale=10);
+    CarManager = CarControl('http://20.1.1.70:5000', delay_check_rate=0.5);
 
     w_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y), (key_pad_size, key_pad_size));
     s_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
@@ -73,7 +73,7 @@ def main():
             right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font);
 
             delayMS_text = font.render(str(int(CarManager.delayMS*1000))+"ms", False, (0,255,0));
-            display.blit(delayMS_text, (img_pos[0]+5, img_pos[1]));
+            display.blit(delayMS_text, (img_pos[0], img_pos[1]-35));
 
 
             turn = 0;
