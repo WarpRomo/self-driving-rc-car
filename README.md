@@ -2,10 +2,10 @@
 
 ### CarController(ip=string, image_rate=float, image_downsample=int, control_rate=float)
 > #### ip(required)
-The IP of the car's server to connect to, example: ip="http://127.0.0.1:5000"
+> The IP of the car's server to connect to, example: ip="http://127.0.0.1:5000"
 
 > #### image_rate
-The interval at which to fetch the image from the camera of the car, set to -1 to fetch nothing at all, example: image_rate=0.1
+> The interval at which to fetch the image from the camera of the car, set to -1 to fetch nothing at all, example: image_rate=0.1
 
 > #### image_downsample
 The amount to scale down the image the car sends from the image fetch, higher is faster, example: image_downsample=10
