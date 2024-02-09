@@ -20,14 +20,14 @@
 CarManager = CarControl(ip="http://127.0.0.1:5000")
 ```
 ```python
-CarManager = CarControl(ip="http://127.0.0.1:5000", 
-                        image_rate=0.1, 
+CarManager = CarControl(ip="http://127.0.0.1:5000",
+                        image_rate=0.1,
                         control_rate=0.1)
 ```
 ```python
-CarManager = CarControl(ip="http://127.0.0.1:5000", 
-                        image_rate=0.1, 
-                        control_rate=0.1, 
+CarManager = CarControl(ip="http://127.0.0.1:5000",
+                        image_rate=0.1,
+                        control_rate=0.1,
                         image_downsample=10)
 ```
 
@@ -47,7 +47,7 @@ CarManager.turn(-1) #turn left
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000")
-CarManager.turn(-0.3) #move backwards 
+CarManager.turn(-0.3) #move backwards
 ```
 
 ### CarController.ns.carImage
@@ -57,4 +57,56 @@ CarManager.turn(-0.3) #move backwards
 CarManager = CarControl(ip="127.0.0.1:5000")
 time.sleep(0.5)
 print(CarManager.ns.carImage)
+```
+
+# Examples
+
+```python
+from car_module import CarControl;
+import time;
+
+if __name__ == "__main__":
+
+    CarManager = CarControl('http://20.1.1.70:5000', image_rate=-1); #Create Car Controller
+    #image_rate=-1 makes it so that the manager will not fetch camera image (faster)
+
+
+    time.sleep(0.1);
+
+    #Move slowly forward and left
+    CarManager.speed(0.3); #NOTE: the car goes fast, so keep the value low
+    CarManager.turn(-1);
+
+    time.sleep(0.5); #Stay that way for half a second
+
+    #Stop moving, and stop turning
+    CarManager.speed(0);
+    CarManager.turn(0);
+
+    time.sleep(0.1); #Give thread time to send 0 speed/turn instruction...
+
+    CarManager.terminate(); #End controller
+```
+
+```python
+from car_module import CarControl;
+import time;
+
+import PIL;
+from PIL import Image;
+
+if __name__ == "__main__":
+
+    CarManager = CarControl('http://20.1.1.70:5000', image_downscale=3); #Create Car Controller
+
+    #image_downscale is how much to reduce the resolution of the image.
+    #lower resolution image = faster
+
+    time.sleep(0.1); #give time to fetch image
+
+    imageArray = CarManager.ns.carImage #RGB pixels
+    PIL.Image.fromarray(imageArray, "RGB").show()
+
+    CarManager.terminate(); #End controller
+
 ```
