@@ -4,13 +4,13 @@
 > ### ip(required)
 > The IP of the car's server to connect to.
 
-> #### image_rate
+> ### image_rate
 > The interval at which to fetch the image from the camera of the car, set to -1 to fetch nothing at all.
 
-> #### image_downsample
+> ### image_downsample
 > The amount to scale down the image the car sends from the image fetch, higher is faster.
 
-> #### control_rate
+> ### control_rate
 > The interval at which to send car inputs to the car's server.
 
 > [!NOTE]
@@ -33,7 +33,7 @@ CarManager = CarControl(ip="http://127.0.0.1:5000",
 
 ### CarController.turn(value)
 
-> #### value(required)
+> ### value(required)
 > The direciton that the wheels should be set to. -1 is left, 1 is right, keep the value between -1 and 1.
 
 ```python
@@ -42,7 +42,7 @@ CarManager.turn(-1) #turn left
 ```
 
 ### CarController.speed(value)
-> #### value(required)
+> ### value(required)
 > The speed that the wheels should turn -1 is backwrads, 1 is forwards, keep the value between -1 and 1 and low.
 
 ```python
