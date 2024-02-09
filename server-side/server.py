@@ -50,6 +50,12 @@ def sign(x):
 def index():
     return "Awake"
 
+@app.route('/mirror/', methods=['POST'])
+def mirror():
+    input = json.loads(request.data);
+
+    return input["value"];
+
 @app.route('/control/', methods=['POST'])
 def car_control():
     global ns;

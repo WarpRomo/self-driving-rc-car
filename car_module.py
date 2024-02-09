@@ -9,7 +9,7 @@ import threading;
 
 class CarControl:
 
-    def __init__(self, ip, image_rate=0.1, image_downscale=10, control_rate=0.1):
+    def __init__(self, ip, image_rate=0.1, image_downscale=10, control_rate=0.1, delay_check_rate=1):
 
         self.ip = ip;
         self.image_rate = image_rate;
@@ -25,9 +25,11 @@ class CarControl:
 
         image_process = threading.Thread(target=self.image_loop);
         control_process = threading.Thread(target=self.control_loop);
+        delay_check_process = threading.Thread(target=self.delay_check_loop);
 
         self.turnValue = 0;
         self.speedValue = 0;
+        self.delayMS = -1;
         self.carImage = [];
 
         self.image_process_started = False;
@@ -55,6 +57,27 @@ class CarControl:
             return False;
         except:
             return False;
+
+    def delay_action():
+
+        curr_time = time.time();
+        res = self.session.post(self.ip + "/mirror/", json={'value', curr_time});
+        curr_time = time.time();
+        self.delayMS = curr_time - float(res.text)
+
+
+    def delay_check_loop(self):
+
+        self.delay_process_started = True;
+
+        while True:
+
+            if(self.delay_process_started == False): break;
+            if(self.delay_check.rate == -1): continue;
+
+            threading.Thread(target=delay_action);
+            time.sleep(self.delay_check_rate);
+
 
     def idle_limit(self,value):
 

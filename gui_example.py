@@ -4,7 +4,7 @@ import pygame;
 
 from car_module import CarControl;
 
-car_max_speed = 0.7;
+car_max_speed = 0.35;
 
 mouseX = 0;
 mouseY = 0;
@@ -48,52 +48,60 @@ def main():
 
     goal_fps = 60
 
-    while running:
+    try:
+        while running:
 
-        display.fill((30,30,30));
+            display.fill((30,30,30));
 
-        mouseX = pygame.mouse.get_pos()[0];
-        mouseY = pygame.mouse.get_pos()[1];
+            mouseX = pygame.mouse.get_pos()[0];
+            mouseY = pygame.mouse.get_pos()[1];
 
-        dataArray = CarManager.carImage;
+            dataArray = CarManager.carImage;
 
-        if len(dataArray) != 0:
-            dataArray = cv2.resize(dataArray, dsize=(img_size[0], img_size[1]), interpolation= cv2.INTER_AREA)
+            if len(dataArray) != 0:
+                dataArray = cv2.resize(dataArray, dsize=(img_size[0], img_size[1]), interpolation= cv2.INTER_AREA)
 
-            camera_image = cv2.rotate(dataArray, cv2.ROTATE_90_COUNTERCLOCKWISE)
+                camera_image = cv2.rotate(dataArray, cv2.ROTATE_90_COUNTERCLOCKWISE)
 
-            surf = pygame.surfarray.make_surface(camera_image);
+                surf = pygame.surfarray.make_surface(camera_image);
 
-            display.blit(surf, img_pos);
+                display.blit(surf, img_pos);
 
-        forw = draw_button(display, w_key, key_col, key_col_hover, key_col_pressed, ord("w"), "W", font);
-        back = draw_button(display, s_key, key_col, key_col_hover, key_col_pressed, ord("s"), "S", font);
-        left = draw_button(display, a_key, key_col, key_col_hover, key_col_pressed, ord("a"), "A", font);
-        right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font);
+            forw = draw_button(display, w_key, key_col, key_col_hover, key_col_pressed, ord("w"), "W", font);
+            back = draw_button(display, s_key, key_col, key_col_hover, key_col_pressed, ord("s"), "S", font);
+            left = draw_button(display, a_key, key_col, key_col_hover, key_col_pressed, ord("a"), "A", font);
+            right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font);
 
-        turn = 0;
-        speed = 0;
+            delayMS_text = font.render(CarManager.delayMS, False, (255,255,255));
+            display.blit(delayMS_text, img_pos);
 
-        if left: turn = -1;
-        if right: turn = 1;
 
-        if forw: speed = car_max_speed;
-        if back: speed = -car_max_speed;
+            turn = 0;
+            speed = 0;
 
-        CarManager.turn(turn);
-        CarManager.speed(speed);
+            if left: turn = -1;
+            if right: turn = 1;
 
-        pygame.display.flip();
+            if forw: speed = car_max_speed;
+            if back: speed = -car_max_speed;
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False;
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                clicked = True;
-            if event.type == pygame.MOUSEBUTTONUP:
-                clicked = False;
+            CarManager.turn(turn);
+            CarManager.speed(speed);
 
-        clock.tick(goal_fps);
+            pygame.display.flip();
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False;
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    clicked = True;
+                if event.type == pygame.MOUSEBUTTONUP:
+                    clicked = False;
+
+            clock.tick(goal_fps);
+    except KeyboardInterrupt:
+        CarManager.terminate();
+        print("Keyboard Interrupt");
 
 def paste_image(l_img, s_img, x_offset, y_offset):
     l_img[y_offset:y_offset+s_img.shape[0], x_offset:x_offset+s_img.shape[1]] = s_img
