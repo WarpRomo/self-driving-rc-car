@@ -19,8 +19,11 @@
 > ### control_rate
 > The interval at which to send car inputs to the car's server.
 
+> ### delay_check_rate
+> The interval at which to check for latency between the client and server. Latency is stored in the CarManager.delayMS property.
+
 > [!WARNING]
-> For image_rate and control_rate, do not use too low of a value or the server will become flooded.
+> For image_rate / control_rate / delay_rate, do not use too low of a value or the server will become flooded.
 
 ```python
 CarManager = CarControl(ip="http://127.0.0.1:5000")
@@ -63,6 +66,15 @@ CarManager.turn(-0.3) #move backwards
 CarManager = CarControl(ip="127.0.0.1:5000")
 time.sleep(0.5)
 print(CarManager.carImage)
+```
+
+### CarController.delayMS
+> A integer representing the milliseconds of latency between the client and server
+
+```python
+CarManager = CarControl(ip="127.0.0.1:5000", delay_check_rate=0.5)
+time.sleep(1)
+print(CarManager.delayMS)
 ```
 
 # Examples
