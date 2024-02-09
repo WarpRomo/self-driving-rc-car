@@ -56,7 +56,7 @@ CarManager.turn(-1) #turn left
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000")
-CarManager.turn(-0.3) #move backwards
+CarManager.speed(-0.3) #move backwards
 ```
 
 ### CarController.carImage
