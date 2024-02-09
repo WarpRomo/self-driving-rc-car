@@ -16,6 +16,16 @@
 > [!NOTE]
 > For image_rate and control_rate, do not use too low of a value or the server will become flooded. Recommended is 0.1 for both.
 
+```python
+CarManager = CarControl(ip=http://127.0.0.1:5000)
+```
+```python
+CarManager = CarControl(ip=http://127.0.0.1:5000, image_rate=0.1, control_rate=0.1)
+```
+```python
+CarManager = CarControl(ip=http://127.0.0.1:5000, image_rate=0.1, control_rate=0.1, image_downsample=10)
+```
+
 ### CarController.turn(value=float)
 
 > #### value(required)
