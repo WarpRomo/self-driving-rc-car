@@ -1,6 +1,6 @@
 # Documentation
 
-### CarController(ip=string, image_rate=float, image_downsample=int, control_rate=float)
+### CarController(ip, image_rate, image_downsample, control_rate)
 > #### ip(required)
 > The IP of the car's server to connect to, example: ip="http://127.0.0.1:5000"
 
@@ -26,14 +26,14 @@ CarManager = CarControl(ip=http://127.0.0.1:5000, image_rate=0.1, control_rate=0
 CarManager = CarControl(ip=http://127.0.0.1:5000, image_rate=0.1, control_rate=0.1, image_downsample=10)
 ```
 
-### CarController.turn(value=float)
+### CarController.turn(value)
 
 > #### value(required)
 > The direciton that the wheels should be set to. -1 is left, 1 is right, keep the value between -1 and 1, example: value=0.7
 
-### CarController.speed(value=float)
+### CarController.speed(value)
 > #### value(required)
 > The speed that the wheels should turn -1 is backwrads, 1 is forwards, keep the value between -1 and 1 and low, example: value=-0.3
 
-### CarController.ns.carImage : nd.array
+### CarController.ns.carImage
 > An RGB array containing the most recently fetched image from the car.
