@@ -1,7 +1,7 @@
 # Documentation
 
 ### CarController(ip, image_rate, image_downsample, control_rate)
-> ## ip(required)
+> ### ip(required)
 > The IP of the car's server to connect to.
 
 > #### image_rate
