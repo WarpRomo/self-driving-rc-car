@@ -69,7 +69,7 @@ print(CarManager.carImage)
 ```
 
 ### CarController.delayMS
-> A integer representing the milliseconds of latency between the client and server
+> An integer representing the milliseconds of latency between the client and server
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000", delay_check_rate=0.5)
