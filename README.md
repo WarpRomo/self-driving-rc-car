@@ -23,7 +23,7 @@
 > The interval at which to check for latency between the client and server. Latency is stored in the CarManager.delayMS property.
 
 > [!WARNING]
-> For image_rate / control_rate / delay_rate, do not use too low of a value or the server will become flooded.
+> For image_rate / control_rate / delay_check_rate, do not use too low of a value or the server will become flooded.
 
 ```python
 CarManager = CarControl(ip="http://127.0.0.1:5000")
