@@ -68,21 +68,27 @@ class CarControl:
 
 
     def async_control(self, type, value):
-        self.session.post(self.ip + "/control/",
-                         json={
-                             'type': type,
-                             'value': value
-        });
+        try:
+            self.session.post(self.ip + "/control/",
+                             json={
+                                 'type': type,
+                                 'value': value
+            });
+        except Exception:
+            return;
 
     def async_image(self):
-        image = self.session.get(self.ip + "/image/", json={"down_scale": self.image_downscale});
+        try:
+            image = self.session.get(self.ip + "/image/", json={"down_scale": self.image_downscale});
 
-        enc = json.loads(image.text)
+            enc = json.loads(image.text)
 
-        dataType = numpy.dtype(enc[0])
-        dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
+            dataType = numpy.dtype(enc[0])
+            dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
 
-        self.ns.carImage = dataArray;
+            self.ns.carImage = dataArray;
+        except Exception:
+            return;
 
 
     def image_loop(self):
