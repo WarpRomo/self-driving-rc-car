@@ -49,7 +49,7 @@ CarManager.turn(-1) #turn left
 
 ### CarController.speed(params)
 > ### value(required)
-> The speed that the wheels should turn -1 is backwrads, 1 is forwards, keep the value between -1 and 1 and low.
+> The speed that the wheels should turn -1 is backwards, 1 is forwards, keep the value between -1 and 1 and low.
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000")
