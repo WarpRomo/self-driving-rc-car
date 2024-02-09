@@ -54,7 +54,9 @@ def index():
 def mirror():
     input = json.loads(request.data);
 
-    return input["value"];
+    print(input["value"]);
+
+    return str(input["value"]);
 
 @app.route('/control/', methods=['POST'])
 def car_control():

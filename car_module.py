@@ -15,6 +15,7 @@ class CarControl:
         self.image_rate = image_rate;
         self.image_downscale = image_downscale;
         self.control_rate = control_rate;
+        self.delay_check_rate = delay_check_rate;
 
         if not self.ping():
             raise Exception("IP Invalid, or server is down. Example IP: 'http://20.1.1.70:5000' (http://ip:port)")
@@ -34,12 +35,11 @@ class CarControl:
 
         self.image_process_started = False;
         self.control_process_started = False;
+        self.delay_process_started = False;
 
         image_process.start();
         control_process.start();
-
-        self.image_process = image_process;
-        self.control_process = control_process;
+        delay_check_process.start();
 
         while not (self.image_process_started and self.control_process_started): 1;
 
@@ -49,6 +49,7 @@ class CarControl:
     def terminate(self):
         self.image_process_started = False;
         self.control_process_started = False;
+        self.delay_process_started = False;
 
     def ping(self):
         try:
@@ -58,24 +59,29 @@ class CarControl:
         except:
             return False;
 
-    def delay_action():
+    def delay_action(self):
 
         curr_time = time.time();
-        res = self.session.post(self.ip + "/mirror/", json={'value', curr_time});
+        print("posting");
+        res = self.session.post(self.ip + "/mirror/", json={'value': curr_time});
         curr_time = time.time();
         self.delayMS = curr_time - float(res.text)
+        print("here");
 
 
     def delay_check_loop(self):
 
         self.delay_process_started = True;
 
+        print("yah");
+
         while True:
 
             if(self.delay_process_started == False): break;
-            if(self.delay_check.rate == -1): continue;
+            if(self.delay_check_rate == -1): continue;
 
-            threading.Thread(target=delay_action);
+            print("dew it");
+            threading.Thread(target=self.delay_action).start();
             time.sleep(self.delay_check_rate);
 
 
