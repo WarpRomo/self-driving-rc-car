@@ -72,8 +72,8 @@ def main():
             left = draw_button(display, a_key, key_col, key_col_hover, key_col_pressed, ord("a"), "A", font);
             right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font);
 
-            delayMS_text = font.render(str(int(CarManager.delayMS*1000))+"ms", False, (255,255,255));
-            display.blit(delayMS_text, img_pos);
+            delayMS_text = font.render(str(int(CarManager.delayMS*1000))+"ms", False, (0,255,0));
+            display.blit(delayMS_text, (img_pos[0]+5, img_pos[1]));
 
 
             turn = 0;

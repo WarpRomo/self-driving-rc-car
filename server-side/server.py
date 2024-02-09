@@ -3,6 +3,7 @@ import time;
 
 import logging
 log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 from multiprocessing import Process, Manager;
 from picamera2 import Picamera2, Preview
@@ -53,9 +54,6 @@ def index():
 @app.route('/mirror/', methods=['POST'])
 def mirror():
     input = json.loads(request.data);
-
-    print(input["value"]);
-
     return str(input["value"]);
 
 @app.route('/control/', methods=['POST'])

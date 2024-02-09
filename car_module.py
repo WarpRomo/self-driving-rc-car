@@ -62,25 +62,20 @@ class CarControl:
     def delay_action(self):
 
         curr_time = time.time();
-        print("posting");
         res = self.session.post(self.ip + "/mirror/", json={'value': curr_time});
         curr_time = time.time();
         self.delayMS = curr_time - float(res.text)
-        print("here");
 
 
     def delay_check_loop(self):
 
         self.delay_process_started = True;
 
-        print("yah");
-
         while True:
 
             if(self.delay_process_started == False): break;
             if(self.delay_check_rate == -1): continue;
 
-            print("dew it");
             threading.Thread(target=self.delay_action).start();
             time.sleep(self.delay_check_rate);
 
