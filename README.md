@@ -1,7 +1,6 @@
 # About
 >We have modified a toy rc-car so that it may be automatically driven through our python libraries over WIFI. The car features controllable motors for speed and direction, and also a Raspberry-PI Camera.
-![image](rc-car.png)
-
+<img src="rc-car.png" alt="drawing" width="500"/>
 
 # Documentation
 
