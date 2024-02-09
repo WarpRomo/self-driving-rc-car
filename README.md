@@ -13,8 +13,8 @@
 > #### control_rate
 > The interval at which to send car inputs to the car's server, example: control_rate=0.1</p>
 
-[!NOTE]
-> Note: For image_rate and control_rate, do not use too low of a value or the server will become flooded. Recommended is 0.1 for both.
+> [!NOTE]
+> For image_rate and control_rate, do not use too low of a value or the server will become flooded. Recommended is 0.1 for both.
 
 ### CarController.turn(value=float)
 
