@@ -142,11 +142,11 @@ def car_loop():
 
         speed_store = [0,time.time(),100];
 
-        accel_time = 0.06;
-        deccel_time = 0.04;
+        accel_time = -0.06;
+        deccel_time = -0.04;
 
         decell_forw = 0.1;
-        decell_forw_time = 0.02;
+        decell_forw_time = -0.02;
 
         prev_time = time.time();
 

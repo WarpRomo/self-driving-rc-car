@@ -56,13 +56,13 @@ CarManager = CarControl(ip="127.0.0.1:5000")
 CarManager.turn(-0.3) #move backwards
 ```
 
-### CarController.ns.carImage
+### CarController.carImage
 > A numpy RGB array containing the most recently fetched image from the car.
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000")
 time.sleep(0.5)
-print(CarManager.ns.carImage)
+print(CarManager.carImage)
 ```
 
 # Examples
@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     time.sleep(0.1); #give time to fetch image
 
-    imageArray = CarManager.ns.carImage #RGB pixels
+    imageArray = CarManager.carImage #RGB pixels
     PIL.Image.fromarray(imageArray, "RGB").show()
 
     CarManager.terminate(); #End controller

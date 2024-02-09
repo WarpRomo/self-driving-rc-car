@@ -5,14 +5,13 @@ import threading;
 import base64;
 import time;
 
-from multiprocessing import Process, Manager;
+import threading;
 
 class CarControl:
 
-    def __init__(self, ip, image_rate=0.05, image_downscale=10, control_rate=0.1):
+    def __init__(self, ip, image_rate=0.1, image_downscale=10, control_rate=0.1):
 
         self.ip = ip;
-        self.car_image = None;
         self.image_rate = image_rate;
         self.image_downscale = image_downscale;
         self.control_rate = control_rate;
@@ -24,17 +23,15 @@ class CarControl:
 
         self.session = requests.Session();
 
-        image_process = Process(target=self.image_loop);
-        control_process = Process(target=self.control_loop);
+        image_process = threading.Thread(target=self.image_loop);
+        control_process = threading.Thread(target=self.control_loop);
 
-        manager = Manager()
-        self.ns = manager.Namespace()
+        self.turnValue = 0;
+        self.speedValue = 0;
+        self.carImage = [];
 
-        self.ns.turnValue = 0;
-        self.ns.speedValue = 0;
-        self.ns.carImage = [];
-        self.ns.image_process_started = False;
-        self.ns.control_process_started = False;
+        self.image_process_started = False;
+        self.control_process_started = False;
 
         image_process.start();
         control_process.start();
@@ -42,14 +39,14 @@ class CarControl:
         self.image_process = image_process;
         self.control_process = control_process;
 
-        while not (self.ns.image_process_started and self.ns.control_process_started): 1;
+        while not (self.image_process_started and self.control_process_started): 1;
 
         print("Car Controller Created.")
 
 
     def terminate(self):
-        self.image_process.terminate();
-        self.control_process.terminate();
+        self.image_process_started = False;
+        self.control_process_started = False;
 
     def ping(self):
         try:
@@ -86,16 +83,17 @@ class CarControl:
             dataType = numpy.dtype(enc[0])
             dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
 
-            self.ns.carImage = dataArray;
+            self.carImage = dataArray;
         except Exception:
             return;
 
 
     def image_loop(self):
-        self.ns.image_process_started = True;
+        self.image_process_started = True;
 
         while True:
 
+            if(not self.image_process_started): break;
             if(self.image_rate == -1): continue;
 
             threading.Thread(target=self.async_image).start()
@@ -104,19 +102,21 @@ class CarControl:
 
 
     def control_loop(self):
-        self.ns.control_process_started = True;
+        self.control_process_started = True;
 
         while True:
+
+            if(not self.control_process_started): break;
             if(self.control_rate == -1): continue;
 
-            threading.Thread(target=self.async_control, args=("turn", self.ns.turnValue)).start();
-            threading.Thread(target=self.async_control, args=("speed", self.ns.speedValue)).start();
+            threading.Thread(target=self.async_control, args=("turn", self.turnValue)).start();
+            threading.Thread(target=self.async_control, args=("speed", self.speedValue)).start();
 
             time.sleep(self.control_rate);
 
 
     def turn(self,value):
-        self.ns.turnValue = value;
+        self.turnValue = value;
 
     def speed(self,value):
-        self.ns.speedValue = value;
+        self.speedValue = value;

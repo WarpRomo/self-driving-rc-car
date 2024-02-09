@@ -22,7 +22,7 @@ key_pad_padding = 10;
 
 def main():
 
-    CarManager = CarControl('http://20.1.1.70:5000', control_rate=0.02, image_rate=-1, image_downscale=10);
+    CarManager = CarControl('http://20.1.1.70:5000', control_rate=0.1, image_rate=0.1, image_downscale=10);
 
     w_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y), (key_pad_size, key_pad_size));
     s_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
@@ -55,7 +55,7 @@ def main():
         mouseX = pygame.mouse.get_pos()[0];
         mouseY = pygame.mouse.get_pos()[1];
 
-        dataArray = CarManager.ns.carImage;
+        dataArray = CarManager.carImage;
 
         if len(dataArray) != 0:
             dataArray = cv2.resize(dataArray, dsize=(img_size[0], img_size[1]), interpolation= cv2.INTER_AREA)
