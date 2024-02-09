@@ -13,7 +13,7 @@
 > ### control_rate
 > The interval at which to send car inputs to the car's server.
 
-> [!NOTE]
+> [!WARNING]
 > For image_rate and control_rate, do not use too low of a value or the server will become flooded.
 
 ```python
