@@ -113,7 +113,7 @@ def car_image():
 
     delay = time.time() - curr_time;
 
-    return json.dumps([str(array.dtype), base64.b64encode(array).decode('utf-8'), array.shape])
+    return json.dumps([str(array.dtype), base64.b64encode(array).decode('utf-8'), array.shape, ns.car_direction, ns.car_speed])
 
 
 def car_loop():

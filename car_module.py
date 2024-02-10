@@ -32,6 +32,8 @@ class CarControl:
         self.speedValue = 0;
         self.delayMS = -1;
         self.carImage = [];
+        self.carImageSpeed = 0;
+        self.carImageTurn = 0;
 
         self.image_process_started = False;
         self.control_process_started = False;
@@ -108,6 +110,8 @@ class CarControl:
             dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
 
             self.carImage = dataArray;
+            self.carImageTurn = enc[3];
+            self.carImageSpeed = enc[4];
         except Exception:
             return;
 

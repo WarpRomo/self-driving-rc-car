@@ -62,6 +62,12 @@ CarManager.speed(-0.3) #move backwards
 ### CarController.carImage
 > A numpy RGB array containing the most recently fetched image from the car.
 
+### CarController.carImageTurn
+> A float between -1 and 1 representing the direction of the car at the time of the image.
+
+### CarController.carImageSpeed
+> A float between -1 and 1 representing the speed of the car at the time of the image.
+
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000")
 time.sleep(0.5)
