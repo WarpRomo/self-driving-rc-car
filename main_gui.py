@@ -65,6 +65,8 @@ def main():
 
                 surf = pygame.surfarray.make_surface(camera_image);
 
+                #print((CarManager.carImageTurn, CarManager.carImageSpeed));
+
                 display.blit(surf, img_pos);
 
             forw = draw_button(display, w_key, key_col, key_col_hover, key_col_pressed, ord("w"), "W", font);
