@@ -59,14 +59,18 @@ CarManager = CarControl(ip="127.0.0.1:5000")
 CarManager.speed(-0.3) #move backwards
 ```
 
-### CarController.carImage
+### CarController.param
+> ### carImage
 > A numpy RGB array containing the most recently fetched image from the car.
 
-### CarController.carImageTurn
+> ### carImageTurn
 > A float between -1 and 1 representing the direction of the car at the time of the image.
 
-### CarController.carImageSpeed
+> ### carImageSpeed
 > A float between -1 and 1 representing the speed of the car at the time of the image.
+
+> ### delayMS
+> An integer representing the milliseconds of latency between the client and server
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000")
@@ -75,9 +79,6 @@ print(CarManager.carImage)
 print(CarManager.carImageTurn)
 print(CarManager.carImageSpeed)
 ```
-
-### CarController.delayMS
-> An integer representing the milliseconds of latency between the client and server
 
 ```python
 CarManager = CarControl(ip="127.0.0.1:5000", delay_check_rate=0.5)
