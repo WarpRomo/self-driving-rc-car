@@ -72,6 +72,8 @@ CarManager.speed(-0.3) #move backwards
 CarManager = CarControl(ip="127.0.0.1:5000")
 time.sleep(0.5)
 print(CarManager.carImage)
+print(CarManager.carImageTurn)
+print(CarManager.carImageSpeed)
 ```
 
 ### CarController.delayMS
