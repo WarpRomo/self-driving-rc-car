@@ -59,7 +59,7 @@ CarManager = CarControl(ip="127.0.0.1:5000")
 CarManager.speed(-0.3) #move backwards
 ```
 
-### CarController.param
+### CarController.property
 > ### carImage
 > A numpy RGB array containing the most recently fetched image from the car.
 
