@@ -4,10 +4,10 @@
 
 > <img src="rc-car.png" alt="drawing" width="500"/>
 
-<details>
-<summary>Documentation</summary>
-
 # Documentation
+
+<details>
+<summary>CarController Class</summary>
 
 ### CarController(params)
 
@@ -43,6 +43,10 @@ CarManager = CarControl(ip="http://127.0.0.1:5000",
                         control_rate=0.1,
                         image_downsample=10)
 ```
+</details>
+
+<details>
+<summary>CarController Class Properties</summary>
 
 ### CarController.turn(params)
 
@@ -91,10 +95,10 @@ print(CarManager.delayMS)
 ```
 </details>
 
-<details>
-<summary>Examples</summary>
+# Code Examples
 
-# Examples
+<details>
+<summary>Movement</summary>
 
 ```python
 from car_module import CarControl;
@@ -122,6 +126,11 @@ if __name__ == "__main__":
 
     CarManager.terminate(); #End controller
 ```
+
+</details>
+
+<details>
+<summary>Camera Image</summary>
 
 ```python
 from car_module import CarControl;
