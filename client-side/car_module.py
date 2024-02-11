@@ -34,6 +34,7 @@ class CarControl:
         self.carImage = [];
         self.carImageSpeed = 0;
         self.carImageTurn = 0;
+        self.carImageFrame = 0;
 
         self.image_process_started = False;
         self.control_process_started = False;
@@ -110,6 +111,7 @@ class CarControl:
             dataArray = numpy.frombuffer(base64.b64decode(enc[1]), dataType).reshape(enc[2])
 
             self.carImage = dataArray;
+            self.carImageFrame+=1;
             self.carImageTurn = enc[3];
             self.carImageSpeed = enc[4];
         except Exception:

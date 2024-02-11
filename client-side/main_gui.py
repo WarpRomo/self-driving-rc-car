@@ -1,6 +1,10 @@
 import numpy;
 import cv2
 import pygame;
+import json;
+
+from os import listdir;
+from os.path import isfile, join;
 
 from car_module import CarControl;
 
@@ -9,6 +13,7 @@ car_max_speed = 0.45;
 mouseX = 0;
 mouseY = 0;
 clicked = False;
+just_clicked = False;
 
 key_col = (255,0,0);
 key_col_hover = (220,0,0);
@@ -20,6 +25,8 @@ key_pad_y = 300;
 key_pad_size = 80;
 key_pad_padding = 10;
 
+data_recorder_size = 50;
+
 def main():
 
     CarManager = CarControl('http://20.1.1.70:5000', delay_check_rate=0.5);
@@ -30,6 +37,11 @@ def main():
     a_key = ((key_pad_x, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
     d_key = ((key_pad_x + 2*key_pad_padding + 2*key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
 
+    data_recorder = ((key_pad_x + key_pad_size - data_recorder_size, key_pad_y + key_pad_size - data_recorder_size),(data_recorder_size, data_recorder_size));
+    data_recording = False;
+    prev_record = False;
+    data_frames = [];
+
     img_size = (320,240);
     img_pos = (40,40);
 
@@ -39,6 +51,7 @@ def main():
 
     pygame.font.init();
     font = pygame.font.SysFont('Arial', 30);
+    font_small = pygame.font.SysFont('Arial', 20);
 
     display = pygame.display.set_mode((400, 520))
 
@@ -49,7 +62,23 @@ def main():
     goal_fps = 60
 
     try:
+
+        global clicked;
+        global just_clicked;
+        global mouseX;
+        global mouseY;
+
         while running:
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False;
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if clicked == False:
+                        just_clicked = True;
+                    clicked = True;
+                if event.type == pygame.MOUSEBUTTONUP:
+                    clicked = False;
 
             display.fill((30,30,30));
 
@@ -74,6 +103,47 @@ def main():
             left = draw_button(display, a_key, key_col, key_col_hover, key_col_pressed, ord("a"), "A", font);
             right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font);
 
+            record = draw_button(display, data_recorder, key_col, key_col_hover, key_col_pressed, ord("r"), "R", font_small);
+
+
+            save_frames = False;
+
+            if record and record != prev_record:
+                data_recording = not data_recording
+                if not data_recording:
+                    save_frames = True;
+
+
+            prev_record = record;
+
+            if data_recording:
+
+                draw_text(display, (img_pos[0], img_pos[1]), "Recording " + str(len(data_frames)), font, (0,255,0), False);
+
+                prev = [-1,-1,-1,-1];
+
+                if len(data_frames) > 0: prev = data_frames[len(data_frames)-1];
+
+                if prev[3] != CarManager.carImageFrame:
+                    data_frames.append([CarManager.carImage.tolist(), CarManager.carImageTurn, CarManager.carImageSpeed, CarManager.carImageFrame]);
+
+            if save_frames:
+                files = listdir("./recordings");
+                index = 0;
+
+                for i in range(0, len(files)):
+                    file_index = int(files[i].split(".")[0]);
+                    if file_index >= index: index = file_index + 1;
+
+                f = open("./recordings/" + str(index) + ".json", "w");
+                f.write(json.dumps(data_frames))
+                f.close();
+
+                print("writing");
+
+                data_frames = [];
+
+
             delayMS_text = font.render(str(int(CarManager.delayMS*1000))+"ms", False, (0,255,0));
             display.blit(delayMS_text, (img_pos[0], img_pos[1]-35));
 
@@ -92,13 +162,7 @@ def main():
 
             pygame.display.flip();
 
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    running = False;
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    clicked = True;
-                if event.type == pygame.MOUSEBUTTONUP:
-                    clicked = False;
+            just_clicked = False;
 
             clock.tick(goal_fps);
     except KeyboardInterrupt:
@@ -107,6 +171,18 @@ def main():
 
 def paste_image(l_img, s_img, x_offset, y_offset):
     l_img[y_offset:y_offset+s_img.shape[0], x_offset:x_offset+s_img.shape[1]] = s_img
+
+def draw_text(display, pos, text, font, col=(255,255,255), centered=True):
+    text = font.render(text, False, col);
+    center_pos = (pos[0], pos[1]);
+    w,h = text.get_size();
+
+    text_pos = (center_pos[0] - w/2, center_pos[1] - h/2);
+
+    if not centered:
+        text_pos = pos;
+
+    display.blit(text, text_pos)
 
 def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, font):
 
@@ -137,13 +213,8 @@ def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, fon
 
     pygame.draw.rect(display, end_col, rectangle);
     pygame.draw.rect(display, (0,0,0), rectangle, 10);
-    text = font.render(text, False, (255,255,255));
 
-    center_pos = (pos[0][0]+pos[1][0]/2, pos[0][1] + pos[1][1]/2);
-
-    w,h = text.get_size();
-
-    display.blit(text, (center_pos[0] - w/2, center_pos[1] - h/2))
+    draw_text(display, (p1[0] + p2[0]/2, p1[1] + p2[1]/2), text, font)
 
     return pressed;
 
