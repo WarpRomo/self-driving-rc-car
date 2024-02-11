@@ -1,9 +1,16 @@
+
+<details>
+<summary>About</summary>
+
 # About
+
 >We have modified a toy rc-car so that it may be automatically driven through our python libraries over WIFI. The car features controllable motors for speed and direction, and also a Raspberry-PI Camera.
 
 > <img src="rc-car.png" alt="drawing" width="500"/>
+</details>
 
-# Documentation
+<details>
+<summary>Documentation</summary>
 
 ### CarController(params)
 
@@ -85,8 +92,10 @@ CarManager = CarControl(ip="127.0.0.1:5000", delay_check_rate=0.5)
 time.sleep(1)
 print(CarManager.delayMS)
 ```
+</details>
 
-# Examples
+<details>
+<summary>Examples</summary>
 
 ```python
 from car_module import CarControl;
@@ -137,3 +146,4 @@ if __name__ == "__main__":
     CarManager.terminate(); #End controller
 
 ```
+</details>
