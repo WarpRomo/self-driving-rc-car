@@ -12,6 +12,8 @@
 <details>
 <summary>Documentation</summary>
 
+# Documentation
+
 ### CarController(params)
 
 > ### ip(required)
@@ -96,6 +98,8 @@ print(CarManager.delayMS)
 
 <details>
 <summary>Examples</summary>
+
+# Examples
 
 ```python
 from car_module import CarControl;
