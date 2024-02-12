@@ -212,7 +212,7 @@ def main():
 
             if data_recording:
 
-                draw_text(display, (img_pos[0] + 5, img_pos[1] + 25), "Recording " + str(len(data_frames)), font_small, (0,255,0), False);
+                draw_text(display, (img_pos[0] + 5, img_pos[1] + 25), "Recording " + str(len(data_frames)) + "f", font_small, (0,255,0), False);
 
                 prev = [-1,-1,-1,-1];
 
