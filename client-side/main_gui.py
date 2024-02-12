@@ -35,8 +35,8 @@ data_recorder_size = 50;
 speed_slider_ticks = 20;
 speed_slider_padding = 50;
 speed_slider_width = 20;
-speed_slider_but_height = 30;
-speed_slider_but_width = 40;
+speed_slider_but_height = 38;
+speed_slider_but_width = 50;
 
 def main():
 
@@ -98,6 +98,12 @@ def main():
                     clicked = True;
                 if event.type == pygame.MOUSEBUTTONUP:
                     clicked = False;
+                if event.type == pygame.MOUSEMOTION:
+                    mouseX = event.pos[0];
+                    mouseY = event.pos[1];
+                    #print(event.pos);
+
+            print(pygame.mouse.get_pos())
 
             display.fill((90,90,90));
 
@@ -121,12 +127,12 @@ def main():
 
                 display.blit(surf, img_pos);
 
-            forw = draw_button(display, w_key, move_key_col, move_key_col, move_key_pressed, ord("w"), "W", font, False);
-            back = draw_button(display, s_key, move_key_col, move_key_col, move_key_pressed, ord("s"), "S", font, False);
-            left = draw_button(display, a_key, move_key_col, move_key_col, move_key_pressed, ord("a"), "A", font, False);
-            right = draw_button(display, d_key, move_key_col, move_key_col, move_key_pressed, ord("d"), "D", font, False);
+            forw = draw_button(display, w_key, move_key_col, move_key_col, move_key_pressed, ord("w"), "W", font, can_click=False);
+            back = draw_button(display, s_key, move_key_col, move_key_col, move_key_pressed, ord("s"), "S", font, can_click=False);
+            left = draw_button(display, a_key, move_key_col, move_key_col, move_key_pressed, ord("a"), "A", font, can_click=False);
+            right = draw_button(display, d_key, move_key_col, move_key_col, move_key_pressed, ord("d"), "D", font, can_click=False);
 
-            record = draw_button(display, data_recorder, key_col, key_col_hover, key_col_pressed, ord("r"), "R", font_small);
+            record = draw_button(display, data_recorder, key_col, key_col_hover, key_col_pressed, ord("r"), "R", font_small, border_radius=10);
 
             joy_stick_rectangle = pygame.Rect(joy_stick[0][0], joy_stick[0][1], joy_stick[1][0], joy_stick[1][1]);
 
@@ -151,9 +157,13 @@ def main():
 
                 if abs(dy) > max_d:
                     dy = abs(dy)/dy * max_d
+                    pygame.mouse.set_pos((dx + joy_stick_center[0], dy + joy_stick_center[1]))
 
                 if abs(dx) > max_d:
                     dx = abs(dx)/dx * max_d
+                    pygame.mouse.set_pos((dx + joy_stick_center[0], dy + joy_stick_center[1]))
+
+                pygame.mouse.set_visible(False);
 
 
                 norm = (dx / max_d, (-dy / max_d) * car_max_speed);
@@ -162,9 +172,11 @@ def main():
                 CarManager.speed(norm[1]);
 
                 joy_stick_pos = (dx,dy);
+            else:
+                pygame.mouse.set_visible(True);
 
             joy_stick_pos2 = ((joy_stick_center[0] + joy_stick_pos[0] - joy_stick_button_size/2, joy_stick_center[1] + joy_stick_pos[1] - joy_stick_button_size/2), (joy_stick_button_size, joy_stick_button_size));
-            joy_stick_button = draw_button(display, joy_stick_pos2, key_col, key_col_hover, key_col_pressed, ord("j"), "J", font_small)
+            joy_stick_button = draw_button(display, joy_stick_pos2, key_col, key_col_hover, key_col_pressed, 3412, "", font_small, border_radius=10)
 
             if just_clicked and joy_stick_button:
                 moving_joy_stick = True;
@@ -184,9 +196,9 @@ def main():
 
             speed_slider_button = ((currentButX+1, currentButY), (speed_slider_but_width, speed_slider_but_height))
 
-            speed_slider_clicked = draw_button(display, speed_slider_button, key_col, key_col_hover, key_col_pressed, 39201, "", font_small);
+            speed_slider_clicked = draw_button(display, speed_slider_button, key_col, key_col_hover, key_col_pressed, 39201, "", font_small, border_radius=5);
 
-            draw_text(display, (currentButX + 1 + speed_slider_but_width/2, currentButY-10), str(int(car_max_speed*100)), font_small)
+            draw_text(display, (currentButX + 1 + speed_slider_but_width/2, currentButY+18), str(int(car_max_speed*100)), font_small)
 
             if just_clicked and speed_slider_clicked:
                 moving_speed_slider = True;
@@ -202,7 +214,7 @@ def main():
 
             save_frames = False;
 
-            if record and record != prev_record:
+            if (record and record != prev_record) and just_clicked:
                 data_recording = not data_recording
                 if not data_recording:
                     save_frames = True;
@@ -258,7 +270,7 @@ def main():
 
             just_clicked = False;
 
-            clock.tick(goal_fps);
+            #clock.tick(goal_fps);
     except KeyboardInterrupt:
         CarManager.terminate();
         print("Keyboard Interrupt");
@@ -278,7 +290,12 @@ def draw_text(display, pos, text, font, col=(255,255,255), centered=True):
 
     display.blit(text, text_pos)
 
-def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, font, can_click=True):
+def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, font,
+border_radius=15,
+outline=15,
+can_click=True,
+text_color=(255,255,255),
+outline_color=(0,0,0)):
 
     p1 = pos[0];
     p2 = pos[1];
@@ -305,10 +322,10 @@ def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, fon
 
     rectangle = pygame.Rect(p1[0], p1[1], p2[0], p2[1]);
 
-    pygame.draw.rect(display, (0,0,0), rectangle, border_radius=15);
-    pygame.draw.rect(display, end_col, rectangle.inflate(-15,-15), border_radius=10);
+    pygame.draw.rect(display, outline_color, rectangle, border_radius=border_radius);
+    pygame.draw.rect(display, end_col, rectangle.inflate(-outline, -outline), border_radius=border_radius);
 
-    draw_text(display, (p1[0] + p2[0]/2, p1[1] + p2[1]/2), text, font)
+    draw_text(display, (p1[0] + p2[0]/2, p1[1] + p2[1]/2), text, font, col=text_color)
 
     return pressed;
 
