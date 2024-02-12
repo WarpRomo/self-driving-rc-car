@@ -8,7 +8,7 @@ from os.path import isfile, join;
 
 from car_module import CarControl;
 
-car_max_speed = 0.45;
+car_max_speed = 0.3;
 
 mouseX = 0;
 mouseY = 0;
@@ -25,6 +25,9 @@ key_pad_y = 300;
 key_pad_size = 80;
 key_pad_padding = 10;
 
+joy_stick_size = 200;
+joy_stick_button_size = 60;
+
 data_recorder_size = 50;
 
 def main():
@@ -36,6 +39,11 @@ def main():
 
     a_key = ((key_pad_x, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
     d_key = ((key_pad_x + 2*key_pad_padding + 2*key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
+
+    joy_stick = ((key_pad_x + 1.5*key_pad_size + key_pad_padding - 0.5 * joy_stick_size, key_pad_y + 2*key_pad_padding + 2*key_pad_size), (joy_stick_size, joy_stick_size));
+
+    joy_stick_pos = (0,0);
+    moving_joy_stick = False;
 
     data_recorder = ((key_pad_x + key_pad_size - data_recorder_size, key_pad_y + key_pad_size - data_recorder_size),(data_recorder_size, data_recorder_size));
     data_recording = False;
@@ -53,7 +61,7 @@ def main():
     font = pygame.font.SysFont('Arial', 30);
     font_small = pygame.font.SysFont('Arial', 20);
 
-    display = pygame.display.set_mode((400, 520))
+    display = pygame.display.set_mode((400, 700))
 
     clock = pygame.time.Clock()
 
@@ -98,12 +106,50 @@ def main():
 
                 display.blit(surf, img_pos);
 
-            forw = draw_button(display, w_key, key_col, key_col_hover, key_col_pressed, ord("w"), "W", font);
-            back = draw_button(display, s_key, key_col, key_col_hover, key_col_pressed, ord("s"), "S", font);
-            left = draw_button(display, a_key, key_col, key_col_hover, key_col_pressed, ord("a"), "A", font);
-            right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font);
+            forw = draw_button(display, w_key, key_col, key_col_hover, key_col_pressed, ord("w"), "W", font, False);
+            back = draw_button(display, s_key, key_col, key_col_hover, key_col_pressed, ord("s"), "S", font, False);
+            left = draw_button(display, a_key, key_col, key_col_hover, key_col_pressed, ord("a"), "A", font, False);
+            right = draw_button(display, d_key, key_col, key_col_hover, key_col_pressed, ord("d"), "D", font, False);
 
             record = draw_button(display, data_recorder, key_col, key_col_hover, key_col_pressed, ord("r"), "R", font_small);
+
+            joy_stick_rectangle = pygame.Rect(joy_stick[0][0], joy_stick[0][1], joy_stick[1][0], joy_stick[1][1]);
+            pygame.draw.rect(display, (30,30,30), joy_stick_rectangle);
+            pygame.draw.rect(display, (0,0,0), joy_stick_rectangle, 10);
+
+
+            joy_stick_center = (joy_stick[0][0] + joy_stick[1][0]/2, joy_stick[0][1] + joy_stick[1][1]/2);
+
+            if not clicked:
+                moving_joy_stick = False;
+                joy_stick_pos = (0,0);
+
+            if moving_joy_stick:
+                dx = mouseX - joy_stick_center[0]
+                dy = mouseY - joy_stick_center[1]
+
+                max_d = joy_stick_size/2 - joy_stick_button_size/2;
+
+                if abs(dy) > max_d:
+                    dy = abs(dy)/dy * max_d
+
+                if abs(dx) > max_d:
+                    dx = abs(dx)/dx * max_d
+
+
+                norm = (dx / max_d, (-dy / max_d) * car_max_speed);
+
+                CarManager.turn(norm[0]);
+                CarManager.speed(norm[1]);
+
+                joy_stick_pos = (dx,dy);
+
+            joy_stick_pos2 = ((joy_stick_center[0] + joy_stick_pos[0] - joy_stick_button_size/2, joy_stick_center[1] + joy_stick_pos[1] - joy_stick_button_size/2), (joy_stick_button_size, joy_stick_button_size));
+            joy_stick_button = draw_button(display, joy_stick_pos2, key_col, key_col_hover, key_col_pressed, ord("j"), "J", font_small)
+
+            if just_clicked and joy_stick_button:
+                moving_joy_stick = True;
+
 
 
             save_frames = False;
@@ -147,18 +193,18 @@ def main():
             delayMS_text = font.render(str(int(CarManager.delayMS*1000))+"ms", False, (0,255,0));
             display.blit(delayMS_text, (img_pos[0], img_pos[1]-35));
 
+            if not moving_joy_stick:
+                turn = 0;
+                speed = 0;
 
-            turn = 0;
-            speed = 0;
+                if left: turn = -1;
+                if right: turn = 1;
 
-            if left: turn = -1;
-            if right: turn = 1;
+                if forw: speed = car_max_speed;
+                if back: speed = -car_max_speed;
 
-            if forw: speed = car_max_speed;
-            if back: speed = -car_max_speed;
-
-            CarManager.turn(turn);
-            CarManager.speed(speed);
+                CarManager.turn(turn);
+                CarManager.speed(speed);
 
             pygame.display.flip();
 
@@ -184,7 +230,7 @@ def draw_text(display, pos, text, font, col=(255,255,255), centered=True):
 
     display.blit(text, text_pos)
 
-def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, font):
+def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, font, can_click=True):
 
     p1 = pos[0];
     p2 = pos[1];
@@ -197,7 +243,7 @@ def draw_button(display, pos, col, hoverCol, pressedCol, shortcut_key, text, fon
 
         end_col = hoverCol;
 
-        if clicked:
+        if clicked and can_click:
             pressed = True;
             end_col = pressedCol;
 
