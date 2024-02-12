@@ -99,7 +99,7 @@ def main():
                 if event.type == pygame.MOUSEBUTTONUP:
                     clicked = False;
 
-            display.fill((100,100,100));
+            display.fill((90,90,90));
 
             mouseX = pygame.mouse.get_pos()[0];
             mouseY = pygame.mouse.get_pos()[1];
@@ -179,8 +179,6 @@ def main():
 
             currentTick = round(car_max_speed / (1 / speed_slider_ticks));
 
-            print(currentTick);
-
             currentButY = joy_stick[0][1] + joy_stick_size - currentTick / 20 * joy_stick_size - speed_slider_but_height / 2;
             currentButX = joy_stick[0][0] - speed_slider_but_width/2 - speed_slider_padding;
 
@@ -201,8 +199,6 @@ def main():
 
                 if car_max_speed > 1: car_max_speed = 1;
                 if car_max_speed < 0: car_max_speed = 0;
-
-                print(car_max_speed);
 
             save_frames = False;
 
