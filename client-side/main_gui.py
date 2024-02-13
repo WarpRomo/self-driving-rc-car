@@ -3,6 +3,10 @@ import cv2
 import pygame;
 import json;
 
+from configparser import ConfigParser #load IP address
+config = ConfigParser()
+config.read('config.ini')
+
 from os import listdir;
 from os.path import isfile, join;
 
@@ -21,11 +25,14 @@ key_col = (255,0,0);
 key_col_hover = (220,0,0);
 key_col_pressed = (160,0,0);
 
-key_pad_x = 70;
-key_pad_y = 300;
+img_size = (320,240);
+img_pos = (40,25);
 
-key_pad_size = 80;
-key_pad_padding = 10;
+key_pad_x = 90;
+key_pad_y = 282;
+
+key_pad_size = 70;
+key_pad_padding = 7;
 
 joy_stick_size = 200;
 joy_stick_button_size = 60;
@@ -33,14 +40,16 @@ joy_stick_button_size = 60;
 data_recorder_size = 50;
 
 speed_slider_ticks = 20;
-speed_slider_padding = 50;
+speed_slider_padding = 45;
 speed_slider_width = 20;
 speed_slider_but_height = 38;
 speed_slider_but_width = 50;
 
 def main():
 
-    CarManager = CarControl('http://20.1.1.70:5000', delay_check_rate=0.5);
+    print(('http://' + config.get('main', 'ip')));
+
+    CarManager = CarControl('http://' + config.get('main', 'ip'), delay_check_rate=0.5);
 
     w_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y), (key_pad_size, key_pad_size));
     s_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
@@ -48,7 +57,7 @@ def main():
     a_key = ((key_pad_x, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
     d_key = ((key_pad_x + 2*key_pad_padding + 2*key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
 
-    joy_stick = ((key_pad_x + 1.5*key_pad_size + key_pad_padding - 0.5 * joy_stick_size, key_pad_y + 2*key_pad_padding + 2*key_pad_size + 5), (joy_stick_size, joy_stick_size));
+    joy_stick = ((key_pad_x + 1.5*key_pad_size + key_pad_padding - 0.5 * joy_stick_size - 2, key_pad_y + 2*key_pad_padding + 2*key_pad_size + 5), (joy_stick_size, joy_stick_size));
 
     joy_stick_pos = (0,0);
     moving_joy_stick = False;
@@ -60,9 +69,6 @@ def main():
 
     moving_speed_slider = False;
 
-    img_size = (320,240);
-    img_pos = (40,35);
-
     pygame.init();
 
     pygame.display.set_caption("RC Car Control");
@@ -71,7 +77,7 @@ def main():
     font = pygame.font.SysFont('Arial', 30);
     font_small = pygame.font.SysFont('Arial', 20);
 
-    display = pygame.display.set_mode((400, 720))
+    display = pygame.display.set_mode((400, 670))
 
     clock = pygame.time.Clock()
 
@@ -101,9 +107,6 @@ def main():
                 if event.type == pygame.MOUSEMOTION:
                     mouseX = event.pos[0];
                     mouseY = event.pos[1];
-                    #print(event.pos);
-
-            print(pygame.mouse.get_pos())
 
             display.fill((90,90,90));
 
