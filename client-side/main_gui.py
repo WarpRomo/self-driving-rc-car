@@ -135,7 +135,7 @@ def main():
             left = draw_button(display, a_key, move_key_col, move_key_col, move_key_pressed, ord("a"), "A", font, can_click=False);
             right = draw_button(display, d_key, move_key_col, move_key_col, move_key_pressed, ord("d"), "D", font, can_click=False);
 
-            record = draw_button(display, data_recorder, key_col, key_col_hover, key_col_pressed, ord("r"), "R", font_small, border_radius=10);
+            record = draw_button(display, data_recorder, key_col, key_col_hover, key_col_pressed, 312, "", font_small, border_radius=10);
 
             joy_stick_rectangle = pygame.Rect(joy_stick[0][0], joy_stick[0][1], joy_stick[1][0], joy_stick[1][1]);
 
