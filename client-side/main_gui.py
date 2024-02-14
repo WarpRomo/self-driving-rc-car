@@ -26,16 +26,16 @@ key_col_hover = (220,0,0);
 key_col_pressed = (160,0,0);
 
 img_size = (320,240);
-img_pos = (40,25);
+img_pos = (40,16);
 
 key_pad_x = 90;
-key_pad_y = 282;
+key_pad_y = 270;
 
 key_pad_size = 70;
 key_pad_padding = 7;
 
-joy_stick_size = 200;
-joy_stick_button_size = 60;
+joy_stick_size = 180;
+joy_stick_button_size = 50;
 
 data_recorder_size = 50;
 
@@ -57,7 +57,7 @@ def main():
     a_key = ((key_pad_x, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
     d_key = ((key_pad_x + 2*key_pad_padding + 2*key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
 
-    joy_stick = ((key_pad_x + 1.5*key_pad_size + key_pad_padding - 0.5 * joy_stick_size - 2, key_pad_y + 2*key_pad_padding + 2*key_pad_size + 5), (joy_stick_size, joy_stick_size));
+    joy_stick = ((key_pad_x + 1.5*key_pad_size + key_pad_padding - 0.5 * joy_stick_size - 1, key_pad_y + 2*key_pad_padding + 2*key_pad_size + 5), (joy_stick_size, joy_stick_size));
 
     joy_stick_pos = (0,0);
     moving_joy_stick = False;
@@ -77,7 +77,7 @@ def main():
     font = pygame.font.SysFont('Arial', 30);
     font_small = pygame.font.SysFont('Arial', 20);
 
-    display = pygame.display.set_mode((400, 670))
+    display = pygame.display.set_mode((400, 630))
 
     clock = pygame.time.Clock()
 
