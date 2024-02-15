@@ -49,7 +49,19 @@ def main():
 
     print(('http://' + config.get('main', 'ip')));
 
-    CarManager = CarControl('http://' + config.get('main', 'ip'), delay_check_rate=0.5);
+    # flask
+
+    # 2 semi work
+    # 3 works
+    # 4 good work
+    # 5 flawless
+    # 6 to use
+
+    # gunicorn
+
+    #
+
+    CarManager = CarControl('http://' + config.get('main', 'ip'), delay_check_rate=0.2, image_downscale=5);
 
     w_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y), (key_pad_size, key_pad_size));
     s_key = ((key_pad_x + key_pad_padding + key_pad_size, key_pad_y + key_pad_padding + key_pad_size), (key_pad_size, key_pad_size));
@@ -116,6 +128,8 @@ def main():
             dataArray = CarManager.carImage;
 
             if len(dataArray) != 0:
+                print(dataArray.shape);
+
                 dataArray = cv2.resize(dataArray, dsize=(img_size[0], img_size[1]), interpolation= cv2.INTER_AREA)
 
                 camera_image = cv2.rotate(dataArray, cv2.ROTATE_90_COUNTERCLOCKWISE)

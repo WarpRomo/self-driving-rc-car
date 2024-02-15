@@ -113,6 +113,8 @@ def car_image():
 
     delay = time.time() - curr_time;
 
+    print(delay);
+
     return json.dumps([str(array.dtype), base64.b64encode(array).decode('utf-8'), array.shape, ns.car_direction, ns.car_speed])
 
 
