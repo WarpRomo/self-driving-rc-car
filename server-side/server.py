@@ -108,8 +108,8 @@ def car_image():
     curr_time = time.time();
 
     array = picam.capture_array("main");
-    array = numpy.flip(array, 1)[:,:,:3];
-    array = numpy.ascontiguousarray(array[::down_scale, ::down_scale]);
+    #array = numpy.flip(array, 1)[:,:,:3];
+    #array = numpy.ascontiguousarray(array[::down_scale, ::down_scale]);
 
     delay = time.time() - curr_time;
 
